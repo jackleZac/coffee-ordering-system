@@ -44,7 +44,7 @@ const ProductCard = ({ _id, name, imageKey, description, category, price }) => {
                         {!description ? <p className='h-8'></p> : <p className='h-8 text-center text-xs'>{description}</p>}
                     </div>
                     <div className="py-6">
-                        <div className="text-center font-bold text-xl">${price.toFixed(2)}</div>
+                        <div className="text-center font-bold text-xl">RM{price.toFixed(2)}</div>
                     </div>
                     <div className="">
                         <AddItemToCart _id={_id} name={name} price={price} />

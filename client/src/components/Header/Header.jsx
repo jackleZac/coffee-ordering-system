@@ -9,7 +9,6 @@ import LOGO from "../../assets/artisanBrewsBrand.png";
 let navigation = [
     { name: 'HOME', href: '/', current: false},
     { name: 'MENU', href: '/menu', current: false},
-    { name: 'ABOUT US', href: '/about', current: false},
     { name: 'CONTACT US', href: '/contact', current: false}
 ]
 

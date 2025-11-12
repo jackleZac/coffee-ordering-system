@@ -22,7 +22,7 @@ export const Cart = () => {
                             <div className="flex p-2 w-full border-b">
                                 <div className="w-3/5 truncate">
                                     <div className="text-base">{eachItem.name}</div>
-                                    <div className="text-sm">${eachItem.accPrice}</div>
+                                    <div className="text-sm">RM{eachItem.accPrice}</div>
                                 </div>
                                 <div className="w-2/5 pl-2 flex my-auto text-center">
                                     <AddQuantity {...eachItem}/>
