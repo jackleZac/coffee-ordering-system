@@ -21,7 +21,7 @@ Currently, two official plugins are available:
 
 ## Menu
 <img width="1888" height="919" alt="image" src="https://github.com/user-attachments/assets/5e28c9e7-944c-4606-ae3c-a18c421c48ef" />
-<img width="950" height="764" alt="image" src="https://github.com/user-attachments/assets/cb8fc4bc-a092-4571-a121-c6af1f66f4a7" />
+<img width="1261" height="764" alt="image" src="https://github.com/user-attachments/assets/cb8fc4bc-a092-4571-a121-c6af1f66f4a7" />
 
 ## Contact Us
 <img width="1889" height="919" alt="image" src="https://github.com/user-attachments/assets/8f391428-9bfb-4aaf-920d-74efc2d940c4" />
