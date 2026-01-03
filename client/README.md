@@ -9,11 +9,7 @@ Currently, two official plugins are available:
 
 # User Interfaces
 ## Home
-<img width="689" height="826" alt="image" src="https://github.com/user-attachments/assets/4e05b790-64fe-4b4e-9a99-f32fb990d202" />
-<img width="689" height="827" alt="image" src="https://github.com/user-attachments/assets/30a041df-fdc8-49ab-a225-c3fb9b903167" />
-<img width="1897" height="919" alt="image" src="https://github.com/user-attachments/assets/ec337b9d-8f4f-4269-9980-1e58a873d8a2" />
-<img width="1895" height="930" alt="image" src="https://github.com/user-attachments/assets/189b67b5-0f53-4554-8586-da2d5b17a4ba" />
-<img width="1895" height="932" alt="image" src="https://github.com/user-attachments/assets/80c0717d-3944-4e3e-a02f-ae81b4949ec7" />
+<img width="1894" height="921" alt="image" src="https://github.com/user-attachments/assets/19a2a91b-324a-4e20-b582-3ddf54e51537" />
 
 
 ## Menu
