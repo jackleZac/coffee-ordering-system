@@ -3,9 +3,10 @@ const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const bcyrpt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const { generateToken } = require('./middleware/authMiddleware');
-const Stripe = require('stripe')
+const Stripe = require('stripe');
+const cookieParser = require('cookie-parser');
 
 // Import Stripe secret key
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -17,6 +18,7 @@ const User = require('./model/userSchema');
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
 
 // Port Configuration
 const port = process.env.PORT;
@@ -29,7 +31,7 @@ mongoose.connect(process.env.DB, { dbName: 'cafe' })
     .catch((err) => {
         console.log('Failed to connect to MongoDB Atlas', err)
         process.exit(1)
-    })
+});
 
 
 // Define routes to handle menu
@@ -45,7 +47,7 @@ app.get('/menu', async (req, res) => {
         console.log({ message: error });
         res.status(500).send({ message: 'Internal Server Error' });
     }
-})
+});
 
 app.get('/menu/:category', async (req, res) => {
     try {
@@ -58,7 +60,7 @@ app.get('/menu/:category', async (req, res) => {
         console.log({ message: error });
         res.status(500).send({ message: 'Internal Server Error' });
     }
-})
+});
 
 // Defines routes to handle authentication
 app.post('/register', async (req, res) => {
@@ -82,7 +84,7 @@ app.post('/register', async (req, res) => {
     // Send status to client
     res.status(200).json({ message: "Registration Success!"})
     
-})
+});
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -91,7 +93,7 @@ app.post('/login', async (req, res) => {
         const user = await User.findOne({ username: username })
         if (!user) return res.status(400).json({error: "User Not Found"})
         // Check password validity
-        const match = await bcyrpt.compare(password, user.password)
+        const match = await bcrypt.compare(password, user.password)
         if (!match) {
             res.status(400).json({error: "Incorrect Password"})
         } else {
@@ -99,12 +101,12 @@ app.post('/login', async (req, res) => {
             // Store accessToken in cookie
             res.cookie("access-token", accessToken, { maxAge: 60*60*1000, httpOnly: true, sameSite: 'None', secure: true});
             // Send status to client
-            res.json({ message: "Logged In"})
+            res.json({ message: "Logged In", username: user.username })
         }
     } catch (err) {
         res.status(500).send({ message: 'Internal Server Error' });
     }
-})
+});
 
 // Define route to handle payment
 app.post("/stripe/create-payment-intent", async (req, res) => {
@@ -130,7 +132,7 @@ app.post("/stripe/create-payment-intent", async (req, res) => {
 // Start Express Server
 app.listen(port, () => {
     console.log(`Server listens on PORT ${port}`)
-})
+});
 
 process.on('SIGINT', async () => {
     await mongoose.connection.close()

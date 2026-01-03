@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 import { FaLock } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
+import { LoginUser } from "../redux/auth/AuthSlice";
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const dispatch = useDispatch();
   const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:8080";
   let navigate = useNavigate();
 
@@ -18,11 +21,13 @@ function Login() {
         password: password
       })
       .then((res) => {
-        if (res['data'].message === 'Logged In') 
-          return navigate('/menu')
+        if (res['data'].message === 'Logged In');
+          dispatch(LoginUser(res['data'].username));
+          console.log('saving username upon login. username:', res['data'].username)
+          return navigate('/menu');
       })
-    } catch(error) {
-      console.log(error)
+      } catch(error) {
+        console.log(error);
     }
   }
   // Handle form submission

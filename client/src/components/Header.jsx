@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import Avatar from 'react-avatar';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { MdArrowForwardIos } from "react-icons/md";
-import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
-import LOGO from "../../assets/artisanBrewsBrand.png";
+import LOGO from "../assets/artisanBrewsBrand.png";
+import { selectUsername } from '../redux/auth/AuthSlice';
 
 let navigation = [
     { name: 'HOME', href: '/', current: false},
@@ -13,8 +13,6 @@ let navigation = [
 ]
 
 export const Header = () => {
-  // Check the current page
-  let currentPath = useLocation();
   // Hide mobile navigation by default
   const [showMobileNav, setMobileNav] = useState(false);
   const handleMobileNav = () => {
@@ -24,6 +22,9 @@ export const Header = () => {
         setMobileNav(true)
     )
   };
+
+  // Fetch username
+  const username = useSelector(selectUsername);
 
   return (
     <div>
@@ -41,15 +42,18 @@ export const Header = () => {
                     </Link>
                 ))}
             </div>
-            <div className="flex flex-row text-white text-4xl">
-                <Link to='/login' 
-                    className={`mx-6 flex flex-row my-auto hover:border-2 border-slate-200 rounded-full animate-bounce hover:animate-none 
-                        ${currentPath.pathname != '/login' ? 'block' : 'hidden'}`}>
-                    <p className='text-base my-auto px-6'>LOGIN</p>
-                    <MdArrowForwardIos className='mr-6'/>
-                </Link>
-                <button onClick={() => handleMobileNav()}><IoMenu className="md:hidden mx-6 active:border-2 border-slate-200 rounded-md"/></button>
+            {username ? (
+            <div className="mx-6 flex flex-row my-auto text-white">
+                <p className="my-auto px-6">HELLO, {username.toUpperCase()}</p>
             </div>
+            ) : (
+            <div className="my-auto text-white">
+                <Link to='/login' className={`mx-6 flex flex-row my-auto hover:border-2 border-slate-200 rounded-full animate-bounce hover:animate-none`}>
+                    <p className='text-base my-auto px-6'>LOGIN</p>
+                    <MdArrowForwardIos className='my-auto mr-6'/>
+                </Link>
+            </div>
+            )}
         </header>
         <nav className={`fixed ${showMobileNav ? 'left-0' : '-left-[100%]'} transition-all duration-700 z-50 w-full h-screen bg-[#c6c0b7] text-center`}>
             <div className="relative">
