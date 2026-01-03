@@ -7,17 +7,19 @@ import { FaUser } from "react-icons/fa6";
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:8080";
   let navigate = useNavigate();
 
   const submitForm = async () => {
     try {
-      axios.post('/login', {
+      axios.post(`${SERVER_URL}/login`, {
         username: username,
         password: password
       })
       .then((res) => {
         if (res['data'].message === 'Logged In') 
-          return navigate('/profile')
+          return navigate('/menu')
       })
     } catch(error) {
       console.log(error)

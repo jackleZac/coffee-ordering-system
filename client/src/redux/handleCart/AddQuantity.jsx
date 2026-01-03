@@ -1,4 +1,3 @@
-import React from 'react';
 import { CiSquarePlus } from "react-icons/ci";
 import { useDispatch } from 'react-redux';
 import { addItemQty } from './CartSlice';

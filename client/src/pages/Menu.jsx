@@ -8,6 +8,8 @@ import { IoCartOutline } from "react-icons/io5";
 import { VscCoffee } from "react-icons/vsc";
 import { GiTacos } from "react-icons/gi";
 import { IoFastFoodOutline } from "react-icons/io5";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 function Menu() {
   const [Menu, setMenu] = useState([]);
@@ -17,6 +19,9 @@ function Menu() {
 
   // Use server URL from environment variables
   const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:8080';
+
+  // Initialize stripePromise
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
   console.log("Server URL:", SERVER_URL);
   // Retrieve and display available menu
@@ -76,7 +81,9 @@ function Menu() {
           </div>
           <div>
             <div className={`max-md:fixed top-28 ${cartMobile ? 'left-0':'-left-[100%]'} w-full h-screen transition-all duration-700`}>
-              <Cart />
+              <Elements stripe={stripePromise}>
+                <Cart />
+              </Elements>
             </div>
             <div className="lg:hidden fixed bottom-6 right-2">
               <div className="relative">

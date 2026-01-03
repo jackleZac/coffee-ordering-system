@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -18,11 +18,12 @@ function Register() {
   const [ phone, setPhone ] = useState(60);
   const [ password, setPassword ] = useState('');
 
+  const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:8080";
   let navigate = useNavigate();
   
   const submitForm = async () => {
     try {
-      axios.post('/register', {
+      axios.post(`${SERVER_URL}/register`, {
         firstName: firstName,
         lastName: lastName,
         username: username, 

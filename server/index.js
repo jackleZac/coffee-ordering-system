@@ -4,7 +4,11 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bcyrpt = require('bcryptjs');
-const { generateToken, validateToken } = require('./middleware/authMiddleware');
+const { generateToken } = require('./middleware/authMiddleware');
+const Stripe = require('stripe')
+
+// Import Stripe secret key
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Import model schemas
 const Menu = require('./model/menuSchema');
@@ -85,7 +89,7 @@ app.post('/login', async (req, res) => {
     // Check if user exists
     try {
         const user = await User.findOne({ username: username })
-        if (!user) res.status(400).json({error: "User Not Found"})
+        if (!user) return res.status(400).json({error: "User Not Found"})
         // Check password validity
         const match = await bcyrpt.compare(password, user.password)
         if (!match) {
@@ -101,6 +105,27 @@ app.post('/login', async (req, res) => {
         res.status(500).send({ message: 'Internal Server Error' });
     }
 })
+
+// Define route to handle payment
+app.post("/stripe/create-payment-intent", async (req, res) => {
+  try {
+    const { amount } = req.body; // amount in cents
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: "myr",
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+
+    res.send({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Start Express Server
 app.listen(port, () => {

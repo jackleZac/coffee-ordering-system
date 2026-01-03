@@ -1,15 +1,45 @@
-import { useState, useEffect } from "react";
+import axios from "axios";
 import { useSelector } from "react-redux";
-import { itemsInCart } from "../../redux/handleCart/CartSlice";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { itemsInCart, itemsTotalPrice } from "../../redux/handleCart/CartSlice";
 import { AddQuantity } from "../../redux/handleCart/AddQuantity";
 import { MinusQuantity } from "../../redux/handleCart/MinusQuantity";
 import { RemoveItem } from "../../redux/handleCart/RemoveItem";
-import { ShowTotalPrice } from "../../redux/handleCart/ShowTotalPrice";
-
 
 export const Cart = () => {
     // Retrieve existing items in a cart
     const items = useSelector(itemsInCart);
+
+    // Retrieve total amount
+    const total = useSelector(itemsTotalPrice);
+
+    const stripe = useStripe();
+    const elements = useElements();
+    const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:8080";
+
+    const handleCheckout = async () => {
+        if (!stripe || !elements) return;
+
+        // Stripe needs amount in cents
+        const res = await axios.post(
+        `${SERVER_URL}/stripe/create-payment-intent`,
+        { amount: total * 100 }
+        );
+
+        const { clientSecret } = res.data;
+
+        const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+            card: elements.getElement(CardElement),
+        },
+        });
+
+        if (result.error) {
+        alert(result.error.message);
+        } else if (result.paymentIntent.status === "succeeded") {
+        alert("Payment successful 🎉");
+        }
+    };
 
     return (
         <div className="m-2 p-2 bg-[#ffffff] border-black rounded shadow-md">
@@ -35,8 +65,20 @@ export const Cart = () => {
                     ))}
                 </ul>}
             </div>
-            <ShowTotalPrice />
-            <button className="w-full p-4 text-center text-white font-bold bg-[#373333] border-solid border-2">CHECKOUT</button>
+            <div className="w-full p-4 grid max-md:grid-cols-1">
+                <div className="basis-1/2 text-lg">Delivery Fee: Free</div>
+                <div className="basis-1/2 font-bold text-sm">Total: RM{total}</div>
+            </div>
+            <div className="mt-4 p-2 border rounded">
+                <CardElement />
+            </div>
+            <button
+                onClick={handleCheckout}
+                disabled={!stripe}
+                className="w-full mt-4 p-3 text-white bg-[#373333] font-bold"
+            >
+                CHECKOUT
+            </button>
         </div>
     )
 }
